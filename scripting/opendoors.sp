@@ -1,9 +1,10 @@
-#include <sourcemod>
 #include <adminmenu>
+#include <morecolors>
+#include <sourcemod>
 #include <tf2_stocks>
 #include <updater>
 #undef REQUIRE_PLUGIN
-#define VERSION "1.0"
+#define VERSION "1.0.1"
 #define UPDATE_URL "http://computervps.duckdns.org/OpenDoors/update.txt"
 
 public Plugin:myinfo =
@@ -53,6 +54,7 @@ public Action:command_opendoors(client, args)
   {
     pl_upward();
   }
+  CPrintToChat(client, "{lightgreen}[OpenDoors] {default}The map is now open.");
   return Plugin_Handled;
 }
 
