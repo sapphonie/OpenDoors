@@ -4,8 +4,10 @@
 #include <tf2_stocks>
 #include <updater>
 #undef REQUIRE_PLUGIN
-#define VERSION "1.0.1"
+#define VERSION "1.1"
 #define UPDATE_URL "http://computervps.duckdns.org/OpenDoors/update.txt"
+
+new initial;
 
 public Plugin:myinfo =
 {
@@ -18,8 +20,11 @@ public Plugin:myinfo =
 
 public OnPluginStart()
 {
-	RegAdminCmd("sm_opendoors", command_opendoors, ADMFLAG_KICK);
-
+	HookEvent("teamplay_game_over", OnGameEnd);
+	HookEvent("tf_game_over", OnGameEnd);
+	HookEvent("player_spawn", playerSpawn);
+	HookEvent("player_team", playerTeam);
+	RegServerCmd("mp_tournament_restart", onTournamentRestart);
 	if (LibraryExists("updater"))
     {
         Updater_AddPlugin(UPDATE_URL)
@@ -34,28 +39,72 @@ public OnLibraryAdded(const String:name[])
     }
 }
 
-public Action:command_opendoors(client, args)
+public OnMapStart()
 {
-  decl String:map[32];
-  GetCurrentMap(map, sizeof(map));
-  if (StrEqual(map, "cp_steel"))
-  {
+	CreateTimer(30.0, mapStart);
+}
+
+public Action:mapStart(Handle:timer)
+{
+	initial = 0;
+	PrintToChatAll("initial = 0");
+	unlockMap();
+}
+
+public Action:playerSpawn(Handle:event, String:name[], bool:dontBroadcast)
+{
+	if (initial == 0)
+	{
+		CreateTimer(1.0, delayUnlock);
+	}
+}
+
+public Action:delayUnlock(Handle:timer)
+{
+	unlockMap();
+	initial = 1;
+	PrintToChatAll("initial = 1");
+}
+
+public Action:OnGameEnd(Handle:event, String:name[], bool:dontBroadcast)
+{
+	unlockMap();
+}
+
+public Action:onTournamentRestart(args)
+{
+	unlockMap();
+}
+
+public Action:playerTeam(Handle:event, String:name[], bool:dontBroadcast)
+{
+	if (GetTeamClientCount(2) == 0 && GetTeamClientCount(3) == 0)
+	{
+		initial = 0;
+	}
+}
+
+public unlockMap()
+{
+	decl String:map[32];
+	GetCurrentMap(map, sizeof(map));
+	PrintToChatAll("unlocked map");
+	if (StrEqual(map, "cp_steel"))
+	{
 		cp_steel();
-  }
-  if (StrEqual(map, "pl_badwater_pro_v9"))
-  {
-    pl_badwater_pro_v9();
-  }
-  if (StrEqual(map, "pl_swiftwater_ugc"))
-  {
+	}
+	if (StrEqual(map, "pl_badwater_pro_v9"))
+	{
+		pl_badwater_pro_v9();
+	}
+	if (StrEqual(map, "pl_swiftwater_ugc"))
+	{
 		pl_swiftwater_ugc();
-  }
-  if (StrEqual(map, "pl_upward"))
-  {
-    pl_upward();
-  }
-  CPrintToChat(client, "{lightgreen}[OpenDoors] {default}The map is now open.");
-  return Plugin_Handled;
+	}
+	if (StrEqual(map, "pl_upward"))
+	{
+		pl_upward();
+	}
 }
 
 public cp_steel()
@@ -65,13 +114,21 @@ public cp_steel()
 	while ((ent = FindEntityByClassname(ent, "func_door")) != -1)
 	{
 		GetEntPropString(ent, Prop_Data, "m_iName", name, sizeof(name));
-		if (StrEqual(name, "point_a_door1") || StrEqual(name, "point_a_door2") || StrEqual(name, "point_a_door3") || StrEqual(name, "point_a_door4") || StrEqual(name, "point_a_brushdoor") || StrEqual(name, "point_b_door_left") || StrEqual(name, "point_b_door_right"))
+		if (StrEqual(name, "point_a_brushdoor") || StrEqual(name, "point_a_door1") || StrEqual(name, "point_a_door2") || StrEqual(name, "point_a_door3") || StrEqual(name, "point_a_door4") || StrEqual(name, "point_b_door_left") || StrEqual(name, "point_b_door_right") || StrEqual(name, "point_d_door") || StrEqual(name, "red_spawn_door_right"))
 		{
 			AcceptEntityInput(ent, "Open");
 		}
 		if (StrEqual(name, "point_b_bridge"))
 		{
 			AcceptEntityInput(ent, "Close");
+		}
+	}
+	while ((ent = FindEntityByClassname(ent, "func_brush")) != -1)
+	{
+		GetEntPropString(ent, Prop_Data, "m_iName", name, sizeof(name));
+		if (StrEqual(name, "red_spawn1_doorbrush_a") || StrEqual(name, "red_spawn1_doorbrush_b"))
+		{
+			AcceptEntityInput(ent, "Kill");
 		}
 	}
 }
@@ -83,7 +140,7 @@ public pl_badwater_pro_v9()
   while ((ent = FindEntityByClassname(ent, "func_door")) != -1)
   {
     GetEntPropString(ent, Prop_Data, "m_iName", name, sizeof(name));
-    if (StrEqual(name, "cap1_gate_1_door") || StrEqual(name, "cap1_gate_2_door") || StrEqual(name, "cap1_gate_9_door") || StrEqual(name, "cap1_gate_10_door") || StrEqual(name, "cap1_gate_11_door") || StrEqual(name, "cap1_gate_12_door") || StrEqual(name, "door1_door") || StrEqual(name, "cap2_gate_1_door") || StrEqual(name, "cap2_gate_2_door") || StrEqual(name, "cap1_gate_7_door") || StrEqual(name, "cap1_gate_8_door") || StrEqual(name, "cap3_gate_1_door") || StrEqual(name, "cap3_gate_2_door") || StrEqual(name, "cap3_gate_3_door") || StrEqual(name, "cap3_gate_4_door") || StrEqual(name, "cap1_gate_5_door") || StrEqual(name, "cap1_gate_6_door") || StrEqual(name, "cap2_gate_5_door") || StrEqual(name, "cap2_gate_6_door") || StrEqual(name, "cap2_sign2_door") || StrEqual(name, "window_block_door1") || StrEqual(name, "window_block_door2") || StrEqual(name, "window_block_door3"))
+    if (StrEqual(name, "cap1_gate_1_door") || StrEqual(name, "cap1_gate_2_door") || StrEqual(name, "cap1_gate_5_door") || StrEqual(name, "cap1_gate_6_door") || StrEqual(name, "cap1_gate_7_door") || StrEqual(name, "cap1_gate_8_door") || StrEqual(name, "cap1_gate_9_door") || StrEqual(name, "cap1_gate_10_door") || StrEqual(name, "cap1_gate_11_door") || StrEqual(name, "cap1_gate_12_door") || StrEqual(name, "cap2_gate_1_door") || StrEqual(name, "cap2_gate_2_door") || StrEqual(name, "cap2_gate_5_door") || StrEqual(name, "cap2_gate_6_door") || StrEqual(name, "cap2_sign2_door") || StrEqual(name, "cap3_gate_1_door") || StrEqual(name, "cap3_gate_2_door") || StrEqual(name, "cap3_gate_3_door") || StrEqual(name, "cap3_gate_4_door") || StrEqual(name, "door1_door") || StrEqual(name, "door2_door") || StrEqual(name, "window_block_door1") || StrEqual(name, "window_block_door2") || StrEqual(name, "window_block_door3"))
     {
       AcceptEntityInput(ent, "Kill");
     }
@@ -97,7 +154,7 @@ public pl_swiftwater_ugc()
 	while ((ent = FindEntityByClassname(ent, "func_brush")) != -1)
 	{
 		GetEntPropString(ent, Prop_Data, "m_iName", name, sizeof(name));
-		if (StrEqual(name, "shortcut_stage_3_brush_1") || StrEqual(name, "cp_3_destroy_door") || StrEqual(name, "shortcut_stage_3_brush_6") || StrEqual(name, "shortcut_stage_3_brush_3") || StrEqual(name, "shortcut_stage_3_brush_5") || StrEqual(name, "shortcut_stage_3_brush_4") || StrEqual(name, "stage_2_dynamic_door_1") || StrEqual(name, "stage_2_shortcut_door") || StrEqual(name, "shortcut_stage_3_brush_2"))
+		if (StrEqual(name, "cp_3_destroy_door") || StrEqual(name, "shortcut_stage_3_brush_1") || StrEqual(name, "shortcut_stage_3_brush_2") || StrEqual(name, "shortcut_stage_3_brush_3") || StrEqual(name, "shortcut_stage_3_brush_4") || StrEqual(name, "shortcut_stage_3_brush_5") || StrEqual(name, "shortcut_stage_3_brush_6") || StrEqual(name, "stage_2_dynamic_door_1") || StrEqual(name, "stage_2_shortcut_door") || StrEqual(name, "stage_4_door_entry"))
 		{
 			AcceptEntityInput(ent, "Kill");
 		}
@@ -105,7 +162,11 @@ public pl_swiftwater_ugc()
 	while ((ent = FindEntityByClassname(ent, "func_door")) != -1)
 	{
 		GetEntPropString(ent, Prop_Data, "m_iName", name, sizeof(name));
-		if (StrEqual(name, "shortcut_door_stage_4_up") || StrEqual(name, "stage_5_shortcut_door_1b") || StrEqual(name, "stage_5_shortcut_door_1a"))
+		if (StrEqual(name, "blue_spawn_2_door_1a") || StrEqual(name, "blue_spawn_2_door_1b") || StrEqual(name, "blue_spawn_2_door_2a") || StrEqual(name, "blue_spawn_2_door_2b") || StrEqual(name, "blue_spawn_2_door_3a") || StrEqual(name, "blue_spawn_2_door_3b") || StrEqual(name, "blue_spawn_2_door_4a") || StrEqual(name, "blue_spawn_2_door_4b") || StrEqual(name, "red_spawn_door_exit_1_down") || StrEqual(name, "red_spawn_door_exit_2_down") || StrEqual(name, "red_spawn_door_exit_3_down") || StrEqual(name, "red_spawn_door_exit_4_down") || StrEqual(name, "red_spawn_door_exit_5_down") || StrEqual(name, "shortcut_door_stage_2_left") || StrEqual(name, "shortcut_door_stage_2_right") || StrEqual(name, "shortcut_door_stage_3_right") || StrEqual(name, "shortcut_door_stage_3_left") || StrEqual(name, "stage_1_2_oneway_door") || StrEqual(name, "stage3_shortcut_door_1a") || StrEqual(name, "stage3_shortcut_door_1b") || StrEqual(name, "stage_5_shortcut_door_1a") || StrEqual(name, "stage_5_shortcut_door_1b"))
+		{
+			AcceptEntityInput(ent, "Open");
+		}
+		if (StrEqual(name, "shortcut_door_stage_4_up"))
 		{
 			AcceptEntityInput(ent, "Kill");
 		}
@@ -117,10 +178,11 @@ public pl_upward()
 	new ent = -1;
 	decl String:name[32];
 	while ((ent = FindEntityByClassname(ent, "func_brush")) != -1)
-  {
-		if (StrEqual(name, "door_red_exitC3") || StrEqual(name, "door_red_exitC4") || StrEqual(name, "brush_mid_exitC1_block") || StrEqual(name, "brush_mid_exitC2_block"))
+	{
+		GetEntPropString(ent, Prop_Data, "m_iName", name, sizeof(name));
+		if (StrEqual(name, "brush_mid_exitC1_block") || StrEqual(name, "brush_mid_exitC2_block") || StrEqual(name, "door_red_exitC3") || StrEqual(name, "door_red_exitC4"))
 		{
 			AcceptEntityInput(ent, "Kill");
 		}
-  }
+	}
 }
