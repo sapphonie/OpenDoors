@@ -4,8 +4,8 @@
 #include <tf2_stocks>
 #include <updater>
 #undef REQUIRE_PLUGIN
-#define VERSION "1.1"
-#define UPDATE_URL "http://computervps.duckdns.org/OpenDoors/update.txt"
+#define VERSION "1.1.1"
+#define UPDATE_URL "https://raw.githubusercontent.com/jpenton/OpenDoors/master/update.txt"
 
 new initial;
 
@@ -47,7 +47,6 @@ public OnMapStart()
 public Action:mapStart(Handle:timer)
 {
 	initial = 0;
-	PrintToChatAll("initial = 0");
 	unlockMap();
 }
 
@@ -63,7 +62,6 @@ public Action:delayUnlock(Handle:timer)
 {
 	unlockMap();
 	initial = 1;
-	PrintToChatAll("initial = 1");
 }
 
 public Action:OnGameEnd(Handle:event, String:name[], bool:dontBroadcast)
@@ -88,7 +86,6 @@ public unlockMap()
 {
 	decl String:map[32];
 	GetCurrentMap(map, sizeof(map));
-	PrintToChatAll("unlocked map");
 	if (StrEqual(map, "cp_steel"))
 	{
 		cp_steel();
