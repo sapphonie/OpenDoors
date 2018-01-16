@@ -90,9 +90,13 @@ public unlockMap()
 	{
 		cp_steel();
 	}
-	if (StrEqual(map, "pl_badwater_pro_v9"))
+	if (StrEqual(map, "pl_badwater") || StrEqual(map, "pl_badwater_pro_v9") || StrEqual(map, "pl_badwater_pro_v11"))
 	{
-		pl_badwater_pro_v9();
+		pl_badwater();
+	}
+	if (StrEqual(map, "pl_millstone_ugc_7"))
+	{
+		pl_millstone();
 	}
 	if (StrEqual(map, "pl_swiftwater_ugc"))
 	{
@@ -130,7 +134,7 @@ public cp_steel()
 	}
 }
 
-public pl_badwater_pro_v9()
+public pl_badwater()
 {
   new ent = -1;
   decl String:name[32];
@@ -138,6 +142,20 @@ public pl_badwater_pro_v9()
   {
     GetEntPropString(ent, Prop_Data, "m_iName", name, sizeof(name));
     if (StrEqual(name, "cap1_gate_1_door") || StrEqual(name, "cap1_gate_2_door") || StrEqual(name, "cap1_gate_5_door") || StrEqual(name, "cap1_gate_6_door") || StrEqual(name, "cap1_gate_7_door") || StrEqual(name, "cap1_gate_8_door") || StrEqual(name, "cap1_gate_9_door") || StrEqual(name, "cap1_gate_10_door") || StrEqual(name, "cap1_gate_11_door") || StrEqual(name, "cap1_gate_12_door") || StrEqual(name, "cap2_gate_1_door") || StrEqual(name, "cap2_gate_2_door") || StrEqual(name, "cap2_gate_5_door") || StrEqual(name, "cap2_gate_6_door") || StrEqual(name, "cap2_sign2_door") || StrEqual(name, "cap3_gate_1_door") || StrEqual(name, "cap3_gate_2_door") || StrEqual(name, "cap3_gate_3_door") || StrEqual(name, "cap3_gate_4_door") || StrEqual(name, "door1_door") || StrEqual(name, "door2_door") || StrEqual(name, "window_block_door1") || StrEqual(name, "window_block_door2") || StrEqual(name, "window_block_door3"))
+    {
+      AcceptEntityInput(ent, "Kill");
+    }
+  }
+}
+
+public pl_millstone()
+{
+  new ent = -1;
+  decl String:name[32];
+  while ((ent = FindEntityByClassname(ent, "func_door")) != -1)
+  {
+    GetEntPropString(ent, Prop_Data, "m_iName", name, sizeof(name));
+    if (StrEqual(name, "cc_door") || StrEqual(name, "e_doorway") || StrEqual(name, "portti_sidec_oikea") || StrEqual(name, "portti_sidec_vasen") || StrEqual(name, "portti_2_oikea") || StrEqual(name, "portti_2_vasen") || StrEqual(name, "portti_3_oikea") || StrEqual(name, "portti_3_vasen") || StrEqual(name, "red_blockdoor") || StrEqual(name, "red_doorblock"))
     {
       AcceptEntityInput(ent, "Kill");
     }
