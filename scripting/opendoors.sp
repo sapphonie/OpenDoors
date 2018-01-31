@@ -4,7 +4,7 @@
 #include <tf2_stocks>
 #include <updater>
 #undef REQUIRE_PLUGIN
-#define VERSION "1.1.1"
+#define VERSION "1.1.2"
 #define UPDATE_URL "https://raw.githubusercontent.com/jpenton/OpenDoors/master/update.txt"
 
 new initial;
@@ -98,7 +98,7 @@ public unlockMap()
 	{
 		pl_millstone();
 	}
-	if (StrEqual(map, "pl_swiftwater_ugc"))
+	if (StrEqual(map, "pl_swiftwater_ugc") || StrEqual(map, "pl_swiftwater_final1"))
 	{
 		pl_swiftwater_ugc();
 	}
@@ -141,7 +141,7 @@ public pl_badwater()
   while ((ent = FindEntityByClassname(ent, "func_door")) != -1)
   {
     GetEntPropString(ent, Prop_Data, "m_iName", name, sizeof(name));
-    if (StrEqual(name, "cap1_gate_1_door") || StrEqual(name, "cap1_gate_2_door") || StrEqual(name, "cap1_gate_5_door") || StrEqual(name, "cap1_gate_6_door") || StrEqual(name, "cap1_gate_7_door") || StrEqual(name, "cap1_gate_8_door") || StrEqual(name, "cap1_gate_9_door") || StrEqual(name, "cap1_gate_10_door") || StrEqual(name, "cap1_gate_11_door") || StrEqual(name, "cap1_gate_12_door") || StrEqual(name, "cap2_gate_1_door") || StrEqual(name, "cap2_gate_2_door") || StrEqual(name, "cap2_gate_5_door") || StrEqual(name, "cap2_gate_6_door") || StrEqual(name, "cap2_sign2_door") || StrEqual(name, "cap3_gate_1_door") || StrEqual(name, "cap3_gate_2_door") || StrEqual(name, "cap3_gate_3_door") || StrEqual(name, "cap3_gate_4_door") || StrEqual(name, "door1_door") || StrEqual(name, "door2_door") || StrEqual(name, "window_block_door1") || StrEqual(name, "window_block_door2") || StrEqual(name, "window_block_door3"))
+    if (StrEqual(name, "cap1_gate_1_door") || StrEqual(name, "cap1_gate_2_door") || StrEqual(name, "cap1_gate_3_door") || StrEqual(name, "cap1_gate_4_door") || StrEqual(name, "cap1_gate_5_door") || StrEqual(name, "cap1_gate_6_door") || StrEqual(name, "cap1_gate_7_door") || StrEqual(name, "cap1_gate_8_door") || StrEqual(name, "cap1_gate_9_door") || StrEqual(name, "cap1_gate_10_door") || StrEqual(name, "cap1_gate_11_door") || StrEqual(name, "cap1_gate_12_door") || StrEqual(name, "cap2_gate_1_door") || StrEqual(name, "cap2_gate_2_door") || StrEqual(name, "cap2_gate_3_door") || StrEqual(name, "cap2_gate_4_door") || StrEqual(name, "cap2_gate_5_door") || StrEqual(name, "cap2_gate_6_door") || StrEqual(name, "cap2_sign2_door") || StrEqual(name, "cap3_gate_1_door") || StrEqual(name, "cap3_gate_2_door") || StrEqual(name, "cap3_gate_3_door") || StrEqual(name, "cap3_gate_4_door") || StrEqual(name, "door1_door") || StrEqual(name, "door2_door") || StrEqual(name, "window_block_door1") || StrEqual(name, "window_block_door2") || StrEqual(name, "window_block_door3"))
     {
       AcceptEntityInput(ent, "Kill");
     }
@@ -177,11 +177,11 @@ public pl_swiftwater_ugc()
 	while ((ent = FindEntityByClassname(ent, "func_door")) != -1)
 	{
 		GetEntPropString(ent, Prop_Data, "m_iName", name, sizeof(name));
-		if (StrEqual(name, "blue_spawn_2_door_1a") || StrEqual(name, "blue_spawn_2_door_1b") || StrEqual(name, "blue_spawn_2_door_2a") || StrEqual(name, "blue_spawn_2_door_2b") || StrEqual(name, "blue_spawn_2_door_3a") || StrEqual(name, "blue_spawn_2_door_3b") || StrEqual(name, "blue_spawn_2_door_4a") || StrEqual(name, "blue_spawn_2_door_4b") || StrEqual(name, "red_spawn_door_exit_1_down") || StrEqual(name, "red_spawn_door_exit_2_down") || StrEqual(name, "red_spawn_door_exit_3_down") || StrEqual(name, "red_spawn_door_exit_4_down") || StrEqual(name, "red_spawn_door_exit_5_down") || StrEqual(name, "shortcut_door_stage_2_left") || StrEqual(name, "shortcut_door_stage_2_right") || StrEqual(name, "shortcut_door_stage_3_right") || StrEqual(name, "shortcut_door_stage_3_left") || StrEqual(name, "stage_1_2_oneway_door") || StrEqual(name, "stage3_shortcut_door_1a") || StrEqual(name, "stage3_shortcut_door_1b") || StrEqual(name, "stage_5_shortcut_door_1a") || StrEqual(name, "stage_5_shortcut_door_1b"))
+		if (StrEqual(name, "blue_spawn_2_door_1a") || StrEqual(name, "blue_spawn_2_door_1b") || StrEqual(name, "blue_spawn_2_door_2a") || StrEqual(name, "blue_spawn_2_door_2b") || StrEqual(name, "blue_spawn_2_door_3a") || StrEqual(name, "blue_spawn_2_door_3b") || StrEqual(name, "blue_spawn_2_door_4a") || StrEqual(name, "blue_spawn_2_door_4b") || StrEqual(name, "red_spawn_door_exit_1_down") || StrEqual(name, "red_spawn_door_exit_2_down") || StrEqual(name, "red_spawn_door_exit_3_down") || StrEqual(name, "red_spawn_door_exit_4_down") || StrEqual(name, "red_spawn_door_exit_5_down") || StrEqual(name, "shortcut_door_stage_2_left") || StrEqual(name, "shortcut_door_stage_2_right") || StrEqual(name, "shortcut_door_stage_3_right") || StrEqual(name, "shortcut_door_stage_3_left") || StrEqual(name, "stage_1_2_oneway_door") || StrEqual(name, "stage3_shortcut_door_1a") || StrEqual(name, "stage3_shortcut_door_1b"))
 		{
 			AcceptEntityInput(ent, "Open");
 		}
-		if (StrEqual(name, "shortcut_door_stage_4_up"))
+		if (StrEqual(name, "shortcut_door_stage_4_up") || StrEqual(name, "stage_1_2_oneway_door_left") || StrEqual(name, "stage_1_2_oneway_door_right") || StrEqual(name, "stage_5_shortcut_door_1a") || StrEqual(name, "stage_5_shortcut_door_1b"))
 		{
 			AcceptEntityInput(ent, "Kill");
 		}
